@@ -26,3 +26,30 @@
 *.exe
 *.out
 *.app
+
+# log-files
+*.log
+*.tlog
+
+# angry visual studio files
+*.png
+*.htm
+*.XML
+*.css
+*.vcproj
+*.vcxproj
+*.idb
+*.pdb
+*.suo
+*.sdf
+*.filters
+*.ilk
+*.xslt
+*.lastbuildstate
+*.opensdf
+*.sln
+
+*.unsuccessfulbuild
+sln/vc9/bitfield.sln
+*.sln
+*.sln
