@@ -9,6 +9,7 @@
 
 TBitField::TBitField(int len)
 {
+	len=len+1;
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
