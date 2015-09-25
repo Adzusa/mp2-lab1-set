@@ -7,12 +7,20 @@
 
 #include "tbitfield.h"
 
+
 TBitField::TBitField(int len)
 {
-	BitLen=len;
-	MemLen=(BitLen+31)/32;
-	pMem=new TELEM[MemLen];
-
+	if(len>=0)
+	{
+		BitLen=len;
+		MemLen=(BitLen+31)/32;
+		pMem=new TELEM[MemLen];
+		for(int i=0; i<MemLen; i++)
+		{
+			pMem[i]=0;
+		}
+	}else
+		throw new exception();
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
@@ -39,7 +47,7 @@ int TBitField::GetMemIndex(const int n) const // индекс Мем для би
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
-	return 0 | (1<<(n%32));
+	return (1<<(n%32));
 }
 
 // доступ к битам битового поля
@@ -51,23 +59,37 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
-	pMem[GetMemIndex(n)] | GetMemMask(n);
+	if ((n>=0) && (n<BitLen))
+	{
+		pMem[GetMemIndex(n)] |= GetMemMask(n);
+	}
+	else
+		throw new exception();	
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-	pMem[GetMemIndex(n)] & (GetMemMask(n) ^ GetMemMask(n));
+	if ((n>=0) && (n<BitLen))
+	{
+		pMem[GetMemIndex(n)] &= (GetMemMask(n) ^ GetMemMask(n));
+	}else
+		throw new exception();
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-  return pMem[GetMemIndex(n)] & GetMemMask(n)>0;
+	if ((n>=0) && (n<BitLen))
+	{
+		return ((pMem[GetMemIndex(n)] & GetMemMask(n))>0);
+	}else
+		throw new exception();
 }
 
 // битовые операции
 
 TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
+  return *this;
 }
 
 int TBitField::operator==(const TBitField &bf) const // сравнение
@@ -82,22 +104,34 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
+	return *this;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
+	return *this;
 }
 
 TBitField TBitField::operator~(void) // отрицание
 {
+	return *this;
 }
 
 // ввод/вывод
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
+	
+	return istr;
 }
 
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
+	for(int i=0; i<bf.MemLen; i++)
+	{
+		ostr << bf.pMem[i] << ' ';
+	}
+
+	//ostr << endl;
+	return ostr;
 }

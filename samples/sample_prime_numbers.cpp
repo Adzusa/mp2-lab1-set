@@ -17,7 +17,7 @@
 int main()
 {
   int n, m, k, count;
-
+  /*
   setlocale(LC_ALL, "Russian");
   cout << "Тестирование программ поддержки битового поля" << endl;
   cout << "             Решето Эратосфена" << endl;
@@ -49,6 +49,15 @@ int main()
     }
   cout << endl;
   cout << "В первых " << n << " числах " << count << " простых" << endl;
+  */
+
+  TBitField t(10);
+  cout << t << endl;
+  cout << t.GetMemMask(2) << endl;
+  cout << t.GetBit(1) << endl;
+  t.SetBit(1);
+  cout << t << endl;
+  cout << t.GetBit(1) <<endl;
 }
 #else
 
