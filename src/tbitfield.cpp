@@ -71,7 +71,7 @@ void TBitField::ClrBit(const int n) // очистить бит
 {
 	if ((n>=0) && (n<BitLen))
 	{
-		pMem[GetMemIndex(n)] &= (GetMemMask(n) ^ GetMemMask(n));
+		pMem[GetMemIndex(n)] &= ~GetMemMask(n);
 	}else
 		throw new exception();
 }
@@ -89,32 +89,76 @@ int TBitField::GetBit(const int n) const // получить значение б
 
 TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 {
-  return *this;
+	BitLen=bf.BitLen;
+	MemLen=(BitLen+31)/32;
+	delete[] pMem;
+	pMem=new TELEM[MemLen];
+	for(int i=0; i<MemLen; i++)
+	{
+		pMem[i]=bf.pMem[i];
+	}
+
+    return *this;
 }
 
 int TBitField::operator==(const TBitField &bf) const // сравнение
 {
-  return 0;
+	int sum=0;
+	if(BitLen==bf.BitLen)
+	{
+		for(int i=0; i<MemLen-1; i++)
+		{
+			sum+=(pMem[i]!=bf.pMem[i]);
+			//cout << pMem[i] << ' ' << bf.pMem[i] << endl;
+		}
+		for(int i=32*(MemLen-1); i<BitLen; i++)
+		{
+			sum+=(GetBit(i)!=bf.GetBit(i));
+		}
+
+		return (sum==0);
+
+
+	}else 
+		return false;
+
+    return 0;
 }
 
 int TBitField::operator!=(const TBitField &bf) const // сравнение
 {
-  return 0;
+    return !(this->operator==(bf));
 }
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-	return *this;
+	TBitField& t=*(new TBitField(max(BitLen, bf.BitLen)));
+	for(int i=0; i<MemLen; i++)
+	{
+		t.pMem[i]=(pMem[i] | bf.pMem[i]);
+	}
+	return t;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-	return *this;
+	TBitField& t=*(new TBitField(max(BitLen, bf.BitLen)));
+	for(int i=0; i<MemLen; i++)
+	{
+		t.pMem[i]=(pMem[i] & bf.pMem[i]);
+	}
+	return t;
 }
 
 TBitField TBitField::operator~(void) // отрицание
 {
-	return *this;
+	TBitField& t=*(new TBitField(BitLen));
+	for(int i=0; i<MemLen; i++)
+	{
+		t.pMem[i]= ~ pMem[i];
+	}
+	
+	return t;
 }
 
 // ввод/вывод
@@ -127,11 +171,16 @@ istream &operator>>(istream &istr, TBitField &bf) // ввод
 
 ostream &operator<<(ostream &ostr, const TBitField &bf) // вывод
 {
+	/*
 	for(int i=0; i<bf.MemLen; i++)
 	{
 		ostr << bf.pMem[i] << ' ';
 	}
-
+	*/
+	for(int i=0; i<bf.BitLen; i++)
+	{
+		ostr << bf.GetBit(i) << ' ';
+	}
 	//ostr << endl;
 	return ostr;
 }

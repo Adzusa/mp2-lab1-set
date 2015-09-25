@@ -58,6 +58,20 @@ int main()
   t.SetBit(1);
   cout << t << endl;
   cout << t.GetBit(1) <<endl;
+  cout << ~t << endl<<endl;
+
+  const int size = 38;
+  TBitField bf(size), negBf(size), expNegBf(size);
+  bf.SetBit(35);
+  cout << bf << endl;
+  negBf = ~bf;
+  cout << negBf<<endl;
+
+  for(int i = 0; i < size; i++)
+    expNegBf.SetBit(i);
+  cout << expNegBf << endl;
+  expNegBf.ClrBit(35);
+  cout << expNegBf << endl;
 }
 #else
 
