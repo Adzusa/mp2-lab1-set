@@ -130,6 +130,7 @@ __Цель данной работы__  — разработка структу�
 		 
 		 -Turtles are Dying!
 		 -Or Not!
+		 - A new string with very serious information Tutu!
 <!-- LINKS -->
 
 [git]:         https://git-scm.com/book/ru/v2
